@@ -9,7 +9,7 @@ A Radar működtetését egy léptető motorral valósítottuk meg, emellett ult
 - Arduino uno
 - Mini léptető motor 28BYJ-48 (1x)
 - Buzzer (Berregő) (1x)
-- LED mátrix (1x)
+- 8x8-as LED mátrix (1x)
 - LED sor (1x)
 - RGB LED (1x)
 - Ultrahangos távolságérzékelő (1x)
@@ -19,7 +19,7 @@ A Radar működtetését egy léptető motorral valósítottuk meg, emellett ult
 
 ## 3. Használati esetek
 
-## 4. Képernyőtervek
+## 4. Tervek
 
 ![képnév](gitlink ahol a kép van)
 
@@ -51,8 +51,8 @@ A Radar működtetését egy léptető motorral valósítottuk meg, emellett ult
 
 |  | S | W | R | D | F |
 | - | - | - | - | - | - |
-| success | W | - | - | W | - |
+| success | W | - | - | - | - |
 | failure | F | - | - | - | - |
-| btn_press | - | R | W | - | - |
+| btn_press | - | R | W | W | - |
 | sensor_detect | - | - | D | - | - |
 | no_sensor_detect | - | - | - | R | - |
