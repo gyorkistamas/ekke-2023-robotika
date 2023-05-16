@@ -7,11 +7,11 @@ A Radar működtetését egy léptető motorral valósítottuk meg, emellett ult
 ## 2. Alkatrészek
 
 - Arduino uno
+- AA Akkumulátor
 - Mini léptető motor 28BYJ-48 (1x)
 - Buzzer (Berregő) (1x)
 - 8x8-as LED mátrix (1x)
 - LED sor (1x)
-- RGB LED (1x)
 - Ultrahangos távolságérzékelő (1x)
 - Gomb (1x)
 - Potenciométer (1x)
