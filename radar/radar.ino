@@ -1,14 +1,16 @@
-//#include <Stepper.h>
+#include <Stepper.h>
 
-#define trigger 9
+#define trigger 11
 #define echo 10
 
 long duration;
 int distance;
 
 int stepsPerRevolution = 64;
-int fullRotation = 2038
-string state = "clockwise";
+int fullRotation = 2038;
+int limit = 0;
+int currStep = 0;
+bool clockwise = true;
 Stepper myStepper(fullRotation, 6, 8, 7, 9);
 
 
@@ -34,8 +36,8 @@ void SensorHandler()
   digitalWrite(trigger, LOW);
   duration = pulseIn(echo, HIGH);
   distance = duration * 0.034 / 2;
-  Serial.print("Distance: ");
-  Serial.println(distance);
+  //Serial.print("Distance: ");
+  //Serial.println(distance);
 }
 
 float microsecondsToCentimeters(float microseconds) {
@@ -43,28 +45,38 @@ float microsecondsToCentimeters(float microseconds) {
 }
 
 void MotorHandler(){
+  
+  if(clockwise){
 
-  switch(state){
-    case "clockwise":
-      stepsPerRevolution = -stepsPerRevolution;
-      limit = 0;
-      state = "counterClockwise"
-    break;
-    case "counterClockwise":
+    while(currStep < limit){
+    myStepper.step(stepsPerRevolution);
+    currStep += stepsPerRevolution;
+    SensorHandler();
+    Serial.print(currStep);
+    Serial.print("<");
+    Serial.println(limit); 
+  }
+
+    stepsPerRevolution = -stepsPerRevolution;
+    limit = 0;
+    clockwise = false;
+    Serial.println("true");
+
+  }
+  else{
+      while(currStep > limit){
+      myStepper.step(stepsPerRevolution);
+      currStep += stepsPerRevolution;
+      SensorHandler();
+      Serial.print(currStep);
+      Serial.print("<");
+      Serial.println(limit); 
+    }
       stepsPerRevolution = -stepsPerRevolution;
       limit = fullRotation;
-      state = "clockwise";
-    break;
+      clockwise = true;
+      Serial.println("false");
   }
-
-  while(currStep < limit){
-    SetSpeed();
-    myStepper.step(stepsPerRevolution);
-    SensorHandler();
-  }
-}
-
-void SetSpeed(){
-  //potmeter
+  
 }
 
