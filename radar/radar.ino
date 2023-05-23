@@ -18,6 +18,7 @@ void setup() {
 
   pinMode(trigger, OUTPUT);
   pinMode(echo, INPUT);
+  pinMode(12, OUTPUT);
   myStepper.setSpeed(11);
   Serial.begin(9600);
 }
@@ -36,8 +37,11 @@ void SensorHandler()
   digitalWrite(trigger, LOW);
   duration = pulseIn(echo, HIGH);
   distance = duration * 0.034 / 2;
-  //Serial.print("Distance: ");
-  //Serial.println(distance);
+  Serial.print("Distance: ");
+  Serial.println(distance);
+  if(distance < 10){
+    Buzz();
+  }
 }
 
 float microsecondsToCentimeters(float microseconds) {
@@ -52,31 +56,29 @@ void MotorHandler(){
     myStepper.step(stepsPerRevolution);
     currStep += stepsPerRevolution;
     SensorHandler();
-    Serial.print(currStep);
-    Serial.print("<");
-    Serial.println(limit); 
   }
 
     stepsPerRevolution = -stepsPerRevolution;
     limit = 0;
     clockwise = false;
-    Serial.println("true");
-
   }
   else{
       while(currStep > limit){
       myStepper.step(stepsPerRevolution);
       currStep += stepsPerRevolution;
       SensorHandler();
-      Serial.print(currStep);
-      Serial.print("<");
-      Serial.println(limit); 
     }
       stepsPerRevolution = -stepsPerRevolution;
       limit = fullRotation;
       clockwise = true;
-      Serial.println("false");
   }
   
 }
+
+void Buzz(){
+  tone(12, 3000);
+  delay(10);
+  noTone(12);
+}
+  
 
