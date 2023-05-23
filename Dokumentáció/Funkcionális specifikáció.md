@@ -6,16 +6,15 @@ A Radar működtetését egy léptető motorral valósítottuk meg, emellett ult
 
 ## 2. Alkatrészek
 
-- Arduino uno
-- AA Akkumulátor
-- Mini léptető motor 28BYJ-48 (1x)
-- Buzzer (Berregő) (1x)
+- Arduino nano (2x)
+- AA Akkumulátor (1x)
+- 28BYJ-48 mini léptető motor  (1x)
+- ULN2007APG vezérlő a motorhoz (1x)
+- PCDZ Piezo Buzzer (Berregő) (1x)
 - 8x8-as LED mátrix (1x)
-- LED sor (1x)
-- Ultrahangos távolságérzékelő (1x)
+- HC-SR04 ultrahangos távolságérzékelő (1x)
 - Gomb (1x)
-- Potenciométer (1x)
-- Jumper kábelek (Sok)
+- Jumper kábelek
 
 ## 3. Használati esetek
 
