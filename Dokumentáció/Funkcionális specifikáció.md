@@ -13,45 +13,48 @@ A Radar működtetését egy léptető motorral valósítottuk meg, emellett ult
 - PCDZ Piezo Buzzer (Berregő) (1x)
 - 8x8-as LED mátrix (1x)
 - HC-SR04 ultrahangos távolságérzékelő (1x)
-- Gomb (1x)
 - Jumper kábelek
 
-## 3. Használati esetek
+## 3. Tervek
 
-## 4. Tervek
+### Tervrajz
+![Tervrajz](/Dokumentáció/Képek/CAD_tervrajz.png)
 
-![képnév](gitlink ahol a kép van)
+### Kapcsolási rajz
+![Kapcsolási rajz](Képek/Semantikus_rajz.png)
 
-## 5. Forgatókönyvek
+## 4. Forgatókönyvek
 
-### 5.1 Jelölések:
+### 4.1 Jelölések:
 
 - Állapotok:
   
   - **S**: Start (Kezdőállapot)
-  - **W**: Wait (Várakozás)
-  - **R**: (is) Rotating (Forog-e?)
-  - **D**: Detect (Észlelés ultrahangos szenzor által)
-  - **F**: Failure (Sikertelen tesztelés)
+  - **F**: Motor és a mátrixon lévő animáció óramutató járásával megegyező mozgása
+  - **B**: Motor és a mátrixon lévő animáció óramutató járásával ellentétes mozgása
+  - **A**: Észlelés ultrahangos szenzor által, csipog a buzzer, adatküldés a másik arduino-nak
+  - **D**: LED-et működtető arduino megkapja az adatot és feldolgozza.
 
 - Állapotátmenetek:
   
-  - success: Sikeres kezdeti ellenörzés
-  - failure: Sikertelen kezdeti ellenörzés
-  - btn_press: Indító/Leállító gombnyomás
-  - sensor_detect: Sikeres észelelés a szenzor által
-  - no_sensor_detect: Nem észlelt semmit a szenzor
+  - s: Portok beállítása sikeresen megtörtént
+  - d: A motor elkezd forogni körbe, a mátrixon megindul az animáció
+  - a: A szenzor észlel valamit
+  - o: A szenzor már nem érzekel semmit
+  - r: Adat érkezik az arduinonak serial kapcsolaton
+  - p: Az adat feldolgozásra került
 
-### 5.2 Állapotátmenet gráf:
+### 4.2 Állapotátmenet gráf:
 
 ![Állapotátmenet gráf](Képek/állapotátmenet_gráf.png)
 
-### 5.3 Állapotátmenet táblázat:
+### 4.3 Állapotátmenet táblázat:
 
-|  | S | W | R | D | F |
+|  | S | F | B | A | D |
 | - | - | - | - | - | - |
-| success | W | - | - | - | - |
-| failure | F | - | - | - | - |
-| btn_press | - | R | W | W | - |
-| sensor_detect | - | - | D | - | - |
-| no_sensor_detect | - | - | - | R | - |
+| s | F | - | - | - | - |
+| d | F | B | F | - | - |
+| a | - | A | A | - | - |
+| o | - | - | D | B,F | - |
+| r | - | D | D | - | - |
+| p | - | - | - | - | F,B |
