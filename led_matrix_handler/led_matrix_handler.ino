@@ -2,56 +2,43 @@
 
 class DetectedObject {
   public: 
-     int timeToLive = 200;
-     int matrix[8][8] = {
-       {0, 0, 0, 0, 0, 0, 0, 0},
-       {0, 0, 0, 0, 0, 0, 0, 0},
-       {0, 0, 0, 0, 0, 0, 0, 0},
-       {0, 0, 0, 0, 0, 0, 0, 0},
-       {0, 0, 0, 0, 0, 0, 0, 0},
-       {0, 0, 0, 0, 0, 0, 0, 0},
-       {0, 0, 0, 0, 0, 0, 0, 0},
-       {0, 0, 0, 0, 0, 0, 0, 0},
-     };
+     int timeToLive;
+     int x;
+     int y;
 
     DetectedObject(int number) {
     switch(number) {
-      case 0: this->matrix[1][4] = 1; break;
-      case 1: this->matrix[1][5] = 1; break;
-      case 2: this->matrix[1][6] = 1; break;
-      case 3: this->matrix[2][6] = 1; break;
-      case 4: this->matrix[3][6] = 1; break;
-      case 5: this->matrix[4][6] = 1; break;
-      case 7: this->matrix[5][6] = 1; break;
-      case 8: this->matrix[6][6] = 1; break;
-      case 9: this->matrix[6][5] = 1; break;
-      case 10: this->matrix[6][4] = 1; break;
-      case 11: this->matrix[6][3] = 1; break;
-      case 12: this->matrix[6][2] = 1; break;
-      case 13: this->matrix[6][1] = 1; break;
-      case 14: this->matrix[5][1] = 1; break;
-      case 15: this->matrix[4][1] = 1; break;
-      case 16: this->matrix[3][1] = 1; break;
-      case 17: this->matrix[2][1] = 1; break;
-      case 18: this->matrix[1][1] = 1; break;
-      case 19: this->matrix[1][2] = 1; break;
-      case 20: this->matrix[1][3] = 1; break;
+      case 0: this->x = 1; this->y = 4; break;
+      case 1: this->x = 1; this->y = 5; break;
+      case 2: this->x = 1; this->y = 6; break;
+      case 3: this->x = 2; this->y = 6; break;
+      case 4: this->x = 3; this->y = 6; break;
+      case 5: this->x = 4; this->y = 6; break;
+      case 7: this->x = 5; this->y = 6; break;
+      case 8: this->x = 6; this->y = 6; break;
+      case 9: this->x = 6; this->y = 5; break;
+      case 10: this->x = 6; this->y = 4; break;
+      case 11: this->x = 6; this->y = 3; break;
+      case 12: this->x = 6; this->y = 2; break;
+      case 13: this->x = 6; this->y = 1; break;
+      case 14: this->x = 5; this->y = 1; break;
+      case 15: this->x = 4; this->y = 1; break;
+      case 16: this->x = 3; this->y = 1; break;
+      case 17: this->x = 2; this->y = 1; break;
+      case 18: this->x = 1; this->y = 1; break;
+      case 19: this->x = 1; this->y = 2; break;
+      case 20: this->x = 1; this->y = 3; break;
       
     }
-    this->timeToLive = 200;
+    this->timeToLive = 100;
   }
-
-  //Decrease() {
-    //this->timeToLive--;
-    //Serial.println("Decrease hit");
-    //Serial.println(this->timeToLive);
-  //}
 
 };
 
-
-// Mario's Ideas
-// Testing all 64 leds in 8x8 LED matrix by lighting  them up one by one
+const byte numChars = 32;
+char receivedChars[numChars];
+boolean newData = false;
+int dataNumber = 0; 
 
 // Raws 
 #define C1 9  // 2
@@ -149,7 +136,18 @@ int m7[8][8] = {
   {0, 0, 0, 0, 0, 0, 0, 0}
 };
 
-List<DetectedObject> objs;
+List<DetectedObject> coords;
+
+int hits[8][8] = {
+  {0, 0, 0, 0, 0, 0, 0, 0},
+  {0, 0, 0, 0, 0, 0, 0, 0},
+  {0, 0, 0, 0, 0, 0, 1, 0},
+  {0, 0, 0, 0, 0, 0, 0, 0},
+  {0, 0, 0, 0, 0, 0, 0, 0},
+  {0, 0, 0, 0, 0, 0, 0, 0},
+  {0, 0, 0, 0, 0, 0, 0, 0},
+  {0, 0, 0, 0, 0, 0, 0, 0}
+};
 
 void setup() {
   Serial.begin(9600);
@@ -189,8 +187,8 @@ void setup() {
 
 
    //DetectedObject asd = new DetectedObject(3);
-   DetectedObject fasz(3);
-   objs.add(fasz);
+   DetectedObject obj(3);
+   coords.add(obj);
 
 }
 
@@ -219,37 +217,45 @@ void  Set_LED_in_Active_Row(int column, int state){
 }
 
 void loop() {
-  for(int i = 0; i < 10; i++) {
+  for(int i = 0; i < 4; i++) {
+    for(int i = 0; i < 10; i++) {
+    recvWithEndMarker();
     Display(m1);
     delay(1);
-  }
+    }
 
-  for(int i = 0; i < 10; i++) {
+    for(int i = 0; i < 10; i++) {
+      recvWithEndMarker();
     Display(m2);
     delay(1);
-  }
+    }
 
   for(int i = 0; i < 10; i++) {
+    recvWithEndMarker();
     Display(m3);
     delay(1);
   }
 
-  for(int i = 0; i < 10; i++) {
+  for(int i = 0; i < 10; i++) {recvWithEndMarker();
+  recvWithEndMarker();
     Display(m4);
     delay(1);
   }
 
   for(int i = 0; i < 10; i++) {
+    recvWithEndMarker();
     Display(m5);
     delay(1);
   }
 
   for(int i = 0; i < 10; i++) {
+    recvWithEndMarker();
     Display(m6);
     delay(1);
   }
 
   for(int i = 0; i < 10; i++) {
+    recvWithEndMarker();
     Display(m7);
     delay(1);
   }
@@ -261,6 +267,81 @@ void loop() {
   Rotate(m5);
   Rotate(m6);
   Rotate(m7);
+  }
+
+
+  for (int i = 0; i < 3; i++) {
+    Rotate(m1);
+    Rotate(m2);
+    Rotate(m3);
+    Rotate(m4);
+    Rotate(m5);
+    Rotate(m6);
+    Rotate(m7);
+  }
+
+  for(int i = 0; i < 4; i++) {
+    for(int i = 0; i < 10; i++) {
+      recvWithEndMarker();
+    Display(m7);
+    delay(1);
+  }
+
+  for(int i = 0; i < 10; i++) {
+    recvWithEndMarker();
+    Display(m6);
+    delay(1);
+  }
+
+  for(int i = 0; i < 10; i++) {
+    recvWithEndMarker();
+    Display(m5);
+    delay(1);
+  }
+
+  for(int i = 0; i < 10; i++) {
+    recvWithEndMarker();
+    Display(m4);
+    delay(1);
+  }
+
+  for(int i = 0; i < 10; i++) {
+    recvWithEndMarker();
+    Display(m3);
+    delay(1);
+  }
+
+  for(int i = 0; i < 10; i++) {
+    recvWithEndMarker();
+    Display(m2);
+    delay(1);
+  }
+
+  for(int i = 0; i < 10; i++) {
+    recvWithEndMarker();
+    Display(m1);
+    delay(1);
+  }
+
+     for (int i = 0; i < 3; i++) {
+       Rotate(m1);
+      Rotate(m2);
+      Rotate(m3);
+     Rotate(m4);
+     Rotate(m5);
+      Rotate(m6);
+      Rotate(m7);
+   }
+  }
+
+  Rotate(m1);
+      Rotate(m2);
+      Rotate(m3);
+     Rotate(m4);
+     Rotate(m5);
+      Rotate(m6);
+      Rotate(m7);
+
 }
 
 
@@ -306,27 +387,86 @@ DetectedObject obj(3);
 
 void Display(int matri[8][8]) {
 
+  if (newData) {
+      dataNumber = 0;
+      dataNumber = atoi(receivedChars);
+     DetectedObject obj(dataNumber);
+     coords.add(obj);
+     hits[obj.x][obj.y] = 1;
+     newData = false;
+     Serial.println("Data coming");
+  }
+
+
+
+  //Ide, ha jön adat logika
   int res[8][8];
   memcpy(res, matri, sizeof res);
 
+  for(int i = 0; i < coords.getSize(); i++) {
+   DetectedObject temp = coords[i];
+   // if (temp.timeToLive <= 0) {
+    //  int x = temp.x;
+    //  int y = temp.y;
+    //  hits[x][y] = 0;
+    //  coords.remove(i);
+    //  Serial.println("deleted");
+    //}
+    Remove(temp, i);
+  }
 
-  //Serial.println(objs[0].matrix[2][6]);
-  //for (int i = 0; i < sizeof(arrayTest); i++) {
-      //DetectedObject temp = objs.getValue(i);
-      if(obj.timeToLive > 0) {
-        MergeArrays(res, obj.matrix);
-        Decrease(obj);
-      }
-      //asdika.Decrease();
-  //}
   
 
-  //memcpy(res, temp, sizeof temp);
+  for(int i = 0; i < coords.getSize(); i++) {
+    DetectedObject temp = coords[i];
+    temp = Decrease(temp);
+    coords.remove(i);
+    coords.add(temp);
 
+    //coords[i] = temp;
+  }
+
+
+  MergeArrays(res, hits);
   Draw(res);
   
 }
 
-void Decrease(DetectedObject& obj){
+DetectedObject Decrease(DetectedObject& obj){
   obj.timeToLive--;
+  Serial.println(obj.timeToLive);
+  return obj;
+}
+
+void Remove(DetectedObject& obj, int i) {
+  if (obj.timeToLive <= 0) {
+      int x = obj.x;
+      int y = obj.y;
+      hits[x][y] = 0;
+      coords.remove(i);
+      Serial.println("deleted");
+    }
+}
+
+void recvWithEndMarker() {
+    static byte ndx = 0;
+    char endMarker = '\n';
+    char rc;
+    
+    if (Serial.available() > 0) {
+        rc = Serial.read();
+
+        if (rc != endMarker) {
+            receivedChars[ndx] = rc;
+            ndx++;
+            if (ndx >= numChars) {
+                ndx = numChars - 1;
+            }
+        }
+        else {
+            receivedChars[ndx] = '\0'; // terminate the string
+            ndx = 0;
+            newData = true;
+        }
+    }
 }
