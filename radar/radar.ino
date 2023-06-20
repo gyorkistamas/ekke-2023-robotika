@@ -6,11 +6,12 @@
 long duration;
 int distance;
 
-int stepsPerRevolution = 64;
+int stepsPerRevolution = 102;
 int fullRotation = 2038;
 int limit = 0;
 int currStep = 0;
 bool clockwise = true;
+int count = 0;
 Stepper myStepper(fullRotation, 6, 8, 7, 9);
 
 
@@ -19,7 +20,7 @@ void setup() {
   pinMode(trigger, OUTPUT);
   pinMode(echo, INPUT);
   pinMode(12, OUTPUT);
-  myStepper.setSpeed(11);
+  myStepper.setSpeed(10);
   Serial.begin(9600);
 }
 
@@ -37,10 +38,11 @@ void SensorHandler()
   digitalWrite(trigger, LOW);
   duration = pulseIn(echo, HIGH);
   distance = duration * 0.034 / 2;
-  Serial.print("Distance: ");
-  Serial.println(distance);
+  //Serial.print("Distance: ");
+  //Serial.println(distance);
   if(distance < 10){
     Buzz();
+    Serial.println(count);
   }
 }
 
@@ -55,6 +57,7 @@ void MotorHandler(){
     while(currStep < limit){
     myStepper.step(stepsPerRevolution);
     currStep += stepsPerRevolution;
+    count++;
     SensorHandler();
   }
 
@@ -66,6 +69,7 @@ void MotorHandler(){
       while(currStep > limit){
       myStepper.step(stepsPerRevolution);
       currStep += stepsPerRevolution;
+      count--;
       SensorHandler();
     }
       stepsPerRevolution = -stepsPerRevolution;
